@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
+import com.poobest.com.mockpeoject.model.ItemClickCallback;
 import com.poobest.com.mockpeoject.model.dao.DerpData;
 import com.poobest.com.mockpeoject.model.dao.MenuListItem;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ItemClickCallback{
 
     RecyclerView recyclerView;
     MenuListAdapter adapter;
@@ -74,7 +76,10 @@ public class HomeFragment extends Fragment {
         adapter = new MenuListAdapter(DerpData.getListData());
 
         recyclerView.setAdapter(adapter);
+        adapter.setItemClickCallback(this);
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -87,4 +92,8 @@ public class HomeFragment extends Fragment {
         // Restore Instance (Fragment level's variables) State here
     }
 
+    @Override
+    public void onClick(View view, int position) {
+        Toast.makeText(getContext(), "Position " + position, Toast.LENGTH_SHORT).show();
+    }
 }
