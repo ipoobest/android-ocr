@@ -3,8 +3,13 @@
     package="com.poobest.com.mockpeoject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
 
     <application
         android:name=".MockApplication"
@@ -22,8 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SplashScreenActivity" />
-        <activity android:name=".search.SearchActivity"/>
-        <activity android:name=".dashboard.DescriptionActivity"/>
+        <activity android:name=".search.SearchActivity" />
+        <activity android:name=".dashboard.DescriptionActivity" />
     </application>
 
 </manifest>
