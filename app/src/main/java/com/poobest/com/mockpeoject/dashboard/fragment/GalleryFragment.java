@@ -54,7 +54,7 @@ public class GalleryFragment extends Fragment {
         // Note: State of variable initialized here could not be saved
         //       in onSavedInstanceState
 
-        
+
 
     }
 
