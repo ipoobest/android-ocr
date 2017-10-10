@@ -1,8 +1,12 @@
 package com.poobest.com.mockpeoject.dashboard.fragment;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,19 +14,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.poobest.com.mockpeoject.R;
+
+import java.io.File;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by j.poobest on 9/24/2017 AD.
  */
 
 public class CameraFragment extends Fragment implements View.OnClickListener {
-
+    File file;
+    Uri uri;
     ImageView imageView;
     Button btnCamera;
-
+    ImageButton BtDownload;
     public CameraFragment() {
         super();
     }
@@ -36,6 +46,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         super.onCreate(savedInstanceState);
         init(savedInstanceState);
 
@@ -64,8 +78,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
         imageView = rootView.findViewById(R.id.image_view);
         btnCamera = rootView.findViewById(R.id.btn_camera);
+        BtDownload =rootView.findViewById(R.id.BtDownload);
 
-
+        BtDownload.setOnClickListener(this);
         btnCamera.setOnClickListener(this);
     }
 
@@ -83,16 +98,64 @@ public class CameraFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == btnCamera){
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, 0);
+        if (view == btnCamera) {
+            CameraOpen();
         }
+        else if (view == BtDownload){
+            GalleryOpen();
+        }
+
     }
+
+    private void CameraOpen() {
+        Intent CamIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        file = new File(Environment.getExternalStorageDirectory(),"file"+String.valueOf(System.currentTimeMillis())+".jpg");
+        uri = Uri.fromFile(file);
+        CamIntent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+        CamIntent.putExtra("return-data",true);
+        startActivityForResult(CamIntent,0);
+    }
+
+    private void GalleryOpen() {
+        Intent imageDownload = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(imageDownload, 2);
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        imageView.setImageBitmap(bitmap);
+        //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        if(requestCode == 2 && resultCode == RESULT_OK && data != null){
+            uri =data.getData();
+            CropImage();
+
+        }
+        else if (requestCode == 0 ){
+            CropImage();
+
+        }
+
+
     }
+
+    private void CropImage() {
+        try{
+            Intent CropIntent = new Intent("com.android.camera.action.CROP");
+            CropIntent.setDataAndType(uri,"image/*");
+
+            CropIntent.putExtra("crop","true");
+            CropIntent.putExtra("outputX",100);
+            CropIntent.putExtra("outputY",100);
+            CropIntent.putExtra("aspectX",3);
+            CropIntent.putExtra("aspectY",4);
+            CropIntent.putExtra("scaleUpIfNeeded",true);
+            CropIntent.putExtra("return-data",true);
+
+            startActivityForResult(CropIntent,1);
+        }
+        catch (ActivityNotFoundException ex) {
+        }
+        }
+
 }
