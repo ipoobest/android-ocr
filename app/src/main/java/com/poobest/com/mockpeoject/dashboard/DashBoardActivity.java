@@ -6,12 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.dashboard.fragment.CameraFragment;
-import com.poobest.com.mockpeoject.dashboard.fragment.GalleryFragment;
 import com.poobest.com.mockpeoject.dashboard.fragment.HomeFragment;
 
 
