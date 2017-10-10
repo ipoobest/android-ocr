@@ -9,7 +9,6 @@ import android.view.MenuItem;
 
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.dashboard.fragment.CameraFragment;
-import com.poobest.com.mockpeoject.dashboard.fragment.GalleryFragment;
 import com.poobest.com.mockpeoject.dashboard.fragment.HomeFragment;
 
 

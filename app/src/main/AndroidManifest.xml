@@ -3,13 +3,23 @@
     package="com.poobest.com.mockpeoject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+=======
+    <uses-permission android:name="android.permission.CAMERA" />
+>>>>>>> origin/develop
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+<<<<<<< HEAD
 
+=======
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+>>>>>>> origin/develop
 
     <application
         android:name=".MockApplication"
@@ -28,7 +38,11 @@
         </activity>
         <activity android:name=".activity.SplashScreenActivity" />
         <activity android:name=".search.SearchActivity" />
+<<<<<<< HEAD
         <activity android:name=".dashboard.DescriptionActivity" />
+=======
+        <activity android:name=".camera.CameraActivity"></activity>
+>>>>>>> origin/develop
     </application>
 
 </manifest>
