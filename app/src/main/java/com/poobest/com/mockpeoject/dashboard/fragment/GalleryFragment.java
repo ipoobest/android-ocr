@@ -53,6 +53,9 @@ public class GalleryFragment extends Fragment {
         // Init 'View' instance(s) with rootView.findViewById here
         // Note: State of variable initialized here could not be saved
         //       in onSavedInstanceState
+
+
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.poobest.com.mockpeoject.dashboard.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +12,12 @@ import android.widget.Toast;
 
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
-import com.poobest.com.mockpeoject.dashboard.DescriptionActivity;
 import com.poobest.com.mockpeoject.model.ItemClickCallback;
 import com.poobest.com.mockpeoject.model.dao.DerpData;
+import com.poobest.com.mockpeoject.model.dao.MenuListItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by j.poobest on 9/24/2017 AD.
@@ -75,7 +77,6 @@ public class HomeFragment extends Fragment implements ItemClickCallback{
 
         recyclerView.setAdapter(adapter);
         adapter.setItemClickCallback(this);
-
     }
 
 
@@ -94,9 +95,5 @@ public class HomeFragment extends Fragment implements ItemClickCallback{
     @Override
     public void onClick(View view, int position) {
         Toast.makeText(getContext(), "Position " + position, Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-        intent.putExtra("Position", position);
-        startActivity(intent);
     }
 }

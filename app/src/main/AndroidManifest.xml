@@ -3,8 +3,6 @@
     package="com.poobest.com.mockpeoject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
@@ -22,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".dashboard.DashBoardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,10 +29,6 @@
         </activity>
         <activity android:name=".activity.SplashScreenActivity" />
         <activity android:name=".search.SearchActivity" />
-        <activity android:name=".dashboard.DescriptionActivity" />
-        <activity android:name=".dashboard.DashBoardActivity" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
         <activity android:name=".camera.CameraActivity"></activity>
     </application>
 

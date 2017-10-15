@@ -19,34 +19,30 @@ android {
         }
     }
 }
-repositories {
-    mavenCentral()
-}
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //FireBase
-    compile 'com.google.firebase:firebase-core:11.4.0'
-    compile 'com.google.firebase:firebase-database:11.4.0'
+//    FireBase
+    
 
     //Library Design
+
+
+    
+    //glide
+    
+
+
+    
+    compile 'com.google.firebase:firebase-core:11.4.0'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.1.0'
-
-    //glide
-    compile 'com.github.bumptech.glide:glide:4.2.0'
-
-    //retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-
-    //Login Facebook
-    compile 'com.facebook.android:facebook-android-sdk:4.27.0'
-
+    compile 'com.github.bumptech.glide:glide:4.1.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
