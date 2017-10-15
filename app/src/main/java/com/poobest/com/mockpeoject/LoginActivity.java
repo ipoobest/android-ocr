@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
         initInstance();
@@ -43,9 +42,9 @@ public class LoginActivity extends AppCompatActivity{
     private void initInstance() {
 
         callbackManager = CallbackManager.Factory.create();
-        login_facebook = (LoginButton) findViewById(R.id.login_facebook);
-        skip_login = (Button) findViewById(R.id.skip_login);
-        txtStatus = (TextView) findViewById(R.id.txtStatus);
+        login_facebook =  findViewById(R.id.login_facebook);
+        skip_login =  findViewById(R.id.skip_login);
+        txtStatus =  findViewById(R.id.txtStatus);
     }
 
     private void loginWithFB(){
