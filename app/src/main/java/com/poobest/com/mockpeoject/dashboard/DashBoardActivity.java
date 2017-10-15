@@ -13,7 +13,7 @@ import com.poobest.com.mockpeoject.dashboard.fragment.GalleryFragment;
 import com.poobest.com.mockpeoject.dashboard.fragment.HomeFragment;
 
 
-public class DashBoardActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
+public class DashBoardActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
 
     BottomNavigationView bottomNavigationView;
@@ -41,6 +41,7 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
 
     private void initInstance() {
 
+        //Login Facebook
 
 
 
