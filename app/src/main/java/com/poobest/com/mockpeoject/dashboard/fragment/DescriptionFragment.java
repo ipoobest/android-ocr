@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.poobest.com.mockpeoject.R;
 
@@ -25,10 +27,9 @@ import java.util.Map;
 
 public class DescriptionFragment extends Fragment {
     public DatabaseReference myRef;
-    private TextView firebaseMenuname;
-    private TextView firebaseIngredient;
-    private TextView firebaseDescription;
-    private TextView firebaseImage;
+    private TextView text_description_description;
+    private TextView text_ingredient_menu_description;
+    private TextView text_name_menu_description;
     private String urlImage;
     ImageView image_menu_description;
     int i = 1;
@@ -52,6 +53,12 @@ public class DescriptionFragment extends Fragment {
 
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
+
+        initFirebase();
+    }
+
+    private void initFirebase() {
+        myRef = FirebaseDatabase.getInstance().getReference();
     }
 
 
@@ -72,36 +79,37 @@ public class DescriptionFragment extends Fragment {
 
 
         image_menu_description = rootView.findViewById(R.id.image_menu_description);
-        firebaseIngredient = rootView.findViewById(R.id.text_ingredient_menu_description);
-        firebaseMenuname = rootView.findViewById(R.id.text_name_menu_description);
-        firebaseDescription = rootView.findViewById(R.id.text_description_description);
+        text_ingredient_menu_description = rootView.findViewById(R.id.text_ingredient_menu_description);
+        text_name_menu_description = rootView.findViewById(R.id.text_name_menu_description);
+        text_description_description = rootView.findViewById(R.id.text_description_description);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        myRef = database.getReference();
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //myRef = database.getReference();
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        Query query = myRef.child(""+i);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map map = (Map) dataSnapshot.getValue();
 
-                urlImage = String.valueOf(map.get("img" + i));
-                //Toast.makeText(getBaseContext(),urlImage,Toast.LENGTH_LONG).show();
+                urlImage = String.valueOf(map.get("Img"));
+                //Toast.makxeText(getContext(),urlImage,Toast.LENGTH_LONG).show();
 
-                String valueName = String.valueOf(map.get("Menu_name" + i));
-                firebaseMenuname.setText(valueName);
+                String valueName = String.valueOf(map.get("Name"));
+                text_name_menu_description.setText(valueName);
 
-                String valueDescription = String.valueOf(map.get("Description" + i));
-                firebaseDescription.setText(valueDescription);
+                String valueDescription = String.valueOf(map.get("Description"));
+                text_description_description.setText(valueDescription);
 
-                String valueIngredient = String.valueOf(map.get("Ingredient" + i));
-                firebaseIngredient.setText(valueIngredient);
+                String valueIngredient = String.valueOf(map.get("Ingredient"));
+                text_ingredient_menu_description.setText(valueIngredient);
 
-                Glide.with(getContext()).load("" + urlImage).into(image_menu_description);
+                Glide.with(getContext()).load(urlImage).into(image_menu_description);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
             }
         });
     }
