@@ -3,14 +3,21 @@ package com.poobest.com.mockpeoject.dashboard.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.facebook.login.LoginManager;
+import com.poobest.com.mockpeoject.LoginActivity;
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
 import com.poobest.com.mockpeoject.dashboard.DescriptionActivity;
@@ -21,10 +28,14 @@ import com.poobest.com.mockpeoject.model.dao.DerpData;
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class HomeFragment extends Fragment implements ItemClickCallback{
+public class HomeFragment extends Fragment implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     MenuListAdapter adapter;
+
+    FloatingSearchView mSearchView;
+    DrawerLayout mDrawer;
+    NavigationView navigationView;
 
     public HomeFragment() {
         super();
@@ -61,6 +72,16 @@ public class HomeFragment extends Fragment implements ItemClickCallback{
 
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
+
+        // set floatingView
+        mDrawer = rootView.findViewById(R.id.drawer_layout);
+        mSearchView = rootView.findViewById(R.id.floating_search_view);
+        navigationView = rootView.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        setupDrawerLayout();
+
+
         // Init 'View' instance(s) with rootView.findViewById here
         // Note: State of variable initialized here could not be saved
         //       in onSavedInstanceState
@@ -77,8 +98,6 @@ public class HomeFragment extends Fragment implements ItemClickCallback{
         adapter.setItemClickCallback(this);
 
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -97,6 +116,35 @@ public class HomeFragment extends Fragment implements ItemClickCallback{
 
         Intent intent = new Intent(getActivity(), DescriptionActivity.class);
         intent.putExtra("Position", position);
+        startActivity(intent);
+    }
+
+    private void attachSearchViewActivityDrawer(FloatingSearchView searchView) {
+        mSearchView.attachNavigationDrawerToMenuButton(mDrawer);
+    }
+
+    private void setupDrawerLayout() {
+        attachSearchViewActivityDrawer(mSearchView);
+    }
+
+
+    //TODO
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        mDrawer.closeDrawer(GravityCompat.START);
+        switch (menuItem.getItemId()) {
+            case R.id.logout_facebook:
+                LoginManager.getInstance().logOut();
+                goLoginScreen();
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    private void goLoginScreen() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

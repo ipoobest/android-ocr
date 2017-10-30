@@ -2,18 +2,12 @@ package com.poobest.com.mockpeoject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.poobest.com.mockpeoject.dashboard.DashBoardActivity;
@@ -24,50 +18,39 @@ import com.poobest.com.mockpeoject.dashboard.DashBoardActivity;
 
 public class LoginActivity extends AppCompatActivity{
 
-    LoginButton login_facebook;
-    Button skip_login;
-    CallbackManager callbackManager;
-    TextView txtStatus;
+    private LoginButton login_facebook;
+    private CallbackManager callbackManager;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        initInstance();
-        loginWithFB();
-
-    }
-
-    private void initInstance() {
-
         callbackManager = CallbackManager.Factory.create();
-        login_facebook =  findViewById(R.id.login_facebook);
-        skip_login =  findViewById(R.id.skip_login);
-        txtStatus =  findViewById(R.id.txtStatus);
-    }
+        login_facebook = findViewById(R.id.login_facebook);
 
-    private void loginWithFB(){
-
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        login_facebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(getBaseContext(),"success",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, DashBoardActivity.class));
-                finish();
+                goMainScreen();
             }
 
             @Override
             public void onCancel() {
-                txtStatus.setText("Login Canceled");
+                Toast.makeText(getApplicationContext(), R.string.cancel_login, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onError(FacebookException e) {
-                txtStatus.setText("Login Error");
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void goMainScreen() {
+        Intent intent = new Intent(this, DashBoardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override
@@ -76,9 +59,4 @@ public class LoginActivity extends AppCompatActivity{
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void SkipLogin(View view){
-        Intent intent = new Intent(this,DashBoardActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }

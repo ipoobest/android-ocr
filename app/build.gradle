@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.poobest.com.mockpeoject"
         minSdkVersion 17
@@ -40,9 +40,8 @@ dependencies {
     //glide
     compile 'com.github.bumptech.glide:glide:4.2.0'
 
-    //retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //SearchView
+    compile 'com.github.arimorty:floatingsearchview:2.1.1'
 
     //Login Facebook
     compile 'com.facebook.android:facebook-android-sdk:4.27.0'
