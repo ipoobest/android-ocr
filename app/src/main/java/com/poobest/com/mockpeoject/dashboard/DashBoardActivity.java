@@ -1,12 +1,21 @@
 package com.poobest.com.mockpeoject.dashboard;
 
+<<<<<<< HEAD
+=======
+import android.content.Intent;
+import android.os.Bundle;
+>>>>>>> origin/master
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.poobest.com.mockpeoject.LoginActivity;
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.dashboard.fragment.CameraFragment;
 import com.poobest.com.mockpeoject.dashboard.fragment.HomeFragment;
@@ -40,6 +49,11 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
 
     private void initInstance() {
 
+        //Login Facebook
+        if (AccessToken.getCurrentAccessToken() == null) {
+            goLoginScreen();
+        }
+
 
 
         //Initializing viewPager
@@ -72,6 +86,19 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
+    }
+
+    private void goLoginScreen() {
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+    }
+
+    public void logout(View view) {
+        LoginManager.getInstance().logOut();
+        goLoginScreen();
     }
 
     private void setupViewPager(ViewPager viewPager) {

@@ -2,6 +2,7 @@ package com.poobest.com.mockpeoject;
 
 import android.app.Application;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.poobest.com.mockpeoject.model.Contextor;
 
 /**
@@ -16,6 +17,9 @@ public class MockApplication extends Application {
 
         // Initialize thing(s) here.
         Contextor.getInstance().init(getApplicationContext());
+
+        // Facebook Login
+        AppEventsLogger.activateApp(this);
     }
 
     @Override
