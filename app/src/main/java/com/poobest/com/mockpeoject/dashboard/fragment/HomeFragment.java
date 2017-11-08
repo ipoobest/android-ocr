@@ -2,6 +2,7 @@ package com.poobest.com.mockpeoject.dashboard.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -79,6 +80,7 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         navigationView = rootView.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         setupDrawerLayout();
 
 
@@ -98,6 +100,7 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         adapter.setItemClickCallback(this);
 
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -119,7 +122,7 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         startActivity(intent);
     }
 
-    private void attachSearchViewActivityDrawer(FloatingSearchView searchView) {
+    private void attachSearchViewActivityDrawer(FloatingSearchView mSearchView) {
         mSearchView.attachNavigationDrawerToMenuButton(mDrawer);
     }
 
@@ -128,23 +131,38 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
     }
 
 
-    //TODO
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
-        mDrawer.closeDrawer(GravityCompat.START);
-        switch (menuItem.getItemId()) {
-            case R.id.logout_facebook:
-                LoginManager.getInstance().logOut();
-                goLoginScreen();
-                return true;
-            default:
-                return true;
-        }
-    }
-
     private void goLoginScreen() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    //TODO
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawer.closeDrawer(GravityCompat.START);
+
+//        int ID = menuItem.getItemId();
+//
+//        if (ID == R.id.logout_facebook){
+//            LoginManager.getInstance().logOut();
+//            goLoginScreen();
+//        }else if (ID == R.id.favourite){
+//            Toast.makeText(getContext(), menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+//        }
+
+        switch (item.getItemId()) {
+            case R.id.logout_facebook:
+                LoginManager.getInstance().logOut();
+                goLoginScreen();
+                return true;
+            case R.id.favourite:
+                Toast.makeText(getActivity(), "favourite", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return true;
+        }
+
     }
 }

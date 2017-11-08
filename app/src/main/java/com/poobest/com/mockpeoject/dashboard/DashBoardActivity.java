@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -18,10 +19,11 @@ import com.poobest.com.mockpeoject.dashboard.fragment.GalleryFragment;
 import com.poobest.com.mockpeoject.dashboard.fragment.HomeFragment;
 
 
-public class DashBoardActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class DashBoardActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
 
 
     BottomNavigationView bottomNavigationView;
+    Button logout_facebook;
 
     //This is our viewPager
     private ViewPager viewPager;
@@ -51,6 +53,7 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
             goLoginScreen();
         }
 
+        logout_facebook = findViewById(R.id.logout_facebook);
 
         //Initializing viewPager
         viewPager = findViewById(R.id.viewpager);
@@ -82,6 +85,16 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
+        logout_facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v == logout_facebook){
+                    LoginManager.getInstance().logOut();
+                    goLoginScreen();
+                }
+            }
+        });
+
     }
 
     private void goLoginScreen() {
@@ -90,11 +103,6 @@ public class DashBoardActivity extends AppCompatActivity implements ViewPager.On
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
-    }
-
-    public void logout(View view) {
-        LoginManager.getInstance().logOut();
-        goLoginScreen();
     }
 
     private void setupViewPager(ViewPager viewPager) {
