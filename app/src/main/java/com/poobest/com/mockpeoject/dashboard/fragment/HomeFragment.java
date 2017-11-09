@@ -2,6 +2,7 @@ package com.poobest.com.mockpeoject.dashboard.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.facebook.login.LoginManager;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.poobest.com.mockpeoject.LoginActivity;
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
@@ -28,7 +29,8 @@ import com.poobest.com.mockpeoject.model.dao.DerpData;
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class HomeFragment extends Fragment implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
+public class HomeFragment extends Fragment
+        implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     MenuListAdapter adapter;
@@ -79,7 +81,9 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         navigationView = rootView.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         setupDrawerLayout();
+        setupSearchBar();
 
 
         // Init 'View' instance(s) with rootView.findViewById here
@@ -98,6 +102,30 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         adapter.setItemClickCallback(this);
 
     }
+
+    private void setupSearchBar() {
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String result) {
+                if (result != null){
+//                    Toast.makeText(getContext(), ""+result, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                    intent.putExtra("result", result);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getContext(), "please", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -119,7 +147,7 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         startActivity(intent);
     }
 
-    private void attachSearchViewActivityDrawer(FloatingSearchView searchView) {
+    private void attachSearchViewActivityDrawer(FloatingSearchView mSearchView) {
         mSearchView.attachNavigationDrawerToMenuButton(mDrawer);
     }
 
@@ -128,23 +156,25 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
     }
 
 
-    //TODO
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
-        mDrawer.closeDrawer(GravityCompat.START);
-        switch (menuItem.getItemId()) {
-            case R.id.logout_facebook:
-                LoginManager.getInstance().logOut();
-                goLoginScreen();
-                return true;
-            default:
-                return true;
-        }
-    }
-
     private void goLoginScreen() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    //TODO
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        mDrawer.closeDrawer(GravityCompat.START);
+
+        int id = item.getItemId();
+
+        if (id == R.id.logout_facebook) {
+            // Handle the camera action
+        }
+        return true;
+
     }
 }

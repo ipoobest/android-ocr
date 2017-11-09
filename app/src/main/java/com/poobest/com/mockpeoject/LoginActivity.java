@@ -18,6 +18,7 @@ import com.poobest.com.mockpeoject.dashboard.DashBoardActivity;
 
 public class LoginActivity extends AppCompatActivity{
 
+    private static final String TAG = "LoginActivity";
     private LoginButton login_facebook;
     private CallbackManager callbackManager;
 
