@@ -32,7 +32,7 @@ public class DescriptionFragment extends Fragment {
     private TextView text_name_menu_description;
     private String urlImage;
     ImageView image_menu_description;
-    int i = 1;
+    String item;
 
     public DescriptionFragment() {
         super();
@@ -53,6 +53,8 @@ public class DescriptionFragment extends Fragment {
 
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
+
+        item = getActivity().getIntent().getExtras().getString("result");
 
         initFirebase();
     }
@@ -86,7 +88,7 @@ public class DescriptionFragment extends Fragment {
         //FirebaseDatabase database = FirebaseDatabase.getInstance();
         //myRef = database.getReference();
 
-        Query query = myRef.child(""+i);
+        Query query = myRef.child(""+item);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

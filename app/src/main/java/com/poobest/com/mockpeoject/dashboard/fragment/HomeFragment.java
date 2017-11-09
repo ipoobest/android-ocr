@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.facebook.login.LoginManager;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.poobest.com.mockpeoject.LoginActivity;
 import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
@@ -29,7 +29,8 @@ import com.poobest.com.mockpeoject.model.dao.DerpData;
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class HomeFragment extends Fragment implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
+public class HomeFragment extends Fragment
+        implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     MenuListAdapter adapter;
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
 
 
         setupDrawerLayout();
+        setupSearchBar();
 
 
         // Init 'View' instance(s) with rootView.findViewById here
@@ -98,6 +100,29 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
 
         recyclerView.setAdapter(adapter);
         adapter.setItemClickCallback(this);
+
+    }
+
+    private void setupSearchBar() {
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String result) {
+                if (result != null){
+//                    Toast.makeText(getContext(), ""+result, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                    intent.putExtra("result", result);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getContext(), "please", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -141,28 +166,15 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         mDrawer.closeDrawer(GravityCompat.START);
 
-//        int ID = menuItem.getItemId();
-//
-//        if (ID == R.id.logout_facebook){
-//            LoginManager.getInstance().logOut();
-//            goLoginScreen();
-//        }else if (ID == R.id.favourite){
-//            Toast.makeText(getContext(), menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-//        }
+        int id = item.getItemId();
 
-        switch (item.getItemId()) {
-            case R.id.logout_facebook:
-                LoginManager.getInstance().logOut();
-                goLoginScreen();
-                return true;
-            case R.id.favourite:
-                Toast.makeText(getActivity(), "favourite", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return true;
+        if (id == R.id.logout_facebook) {
+            // Handle the camera action
         }
+        return true;
 
     }
 }
