@@ -113,12 +113,12 @@ public class HomeFragment extends Fragment
 
             @Override
             public void onSearchAction(String result) {
-                if (result != null){
+                if (result != null) {
 //                    Toast.makeText(getContext(), ""+result, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), DescriptionActivity.class);
                     intent.putExtra("result", result);
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(getContext(), "please", Toast.LENGTH_SHORT).show();
                 }
             }

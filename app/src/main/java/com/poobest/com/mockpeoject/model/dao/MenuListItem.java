@@ -1,14 +1,5 @@
 package com.poobest.com.mockpeoject.model.dao;
 
-import com.poobest.com.mockpeoject.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by j.poobest on 9/24/2017 AD.
- */
-
 public class MenuListItem {
     public String nameMenu;
     int idImgMenu;

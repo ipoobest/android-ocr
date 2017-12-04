@@ -26,13 +26,14 @@ import java.util.Map;
  */
 
 public class DescriptionFragment extends Fragment {
+
     public DatabaseReference myRef;
     private TextView text_description_description;
     private TextView text_ingredient_menu_description;
     private TextView text_name_menu_description;
     private String urlImage;
     ImageView image_menu_description;
-    String item;
+    String item, key;
 
     public DescriptionFragment() {
         super();
@@ -54,19 +55,19 @@ public class DescriptionFragment extends Fragment {
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
 
-        item = getActivity().getIntent().getExtras().getString("result");
+        item = getActivity().getIntent().getStringExtra("result");
 
         initFirebase();
     }
 
     private void initFirebase() {
-        myRef = FirebaseDatabase.getInstance().getReference();
+        myRef = FirebaseDatabase.getInstance().getReference("menu");
     }
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_description, container, false);
         initInstances(rootView, savedInstanceState);
@@ -85,25 +86,43 @@ public class DescriptionFragment extends Fragment {
         text_name_menu_description = rootView.findViewById(R.id.text_name_menu_description);
         text_description_description = rootView.findViewById(R.id.text_description_description);
 
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //myRef = database.getReference();
+        myRef.orderByChild("name")
+                .equalTo("" + item)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            key = childSnapshot.getKey();
+//                            Toast.makeText(getContext(), "" + key, Toast.LENGTH_LONG).show();
+                            initQueryFirebase();
+                        }
+                    }
 
-        Query query = myRef.child(""+item);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void initQueryFirebase() {
+
+        Query query = myRef.child(""+key);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map map = (Map) dataSnapshot.getValue();
 
-                urlImage = String.valueOf(map.get("Img"));
+                urlImage = String.valueOf(map.get("imgUrl"));
                 //Toast.makxeText(getContext(),urlImage,Toast.LENGTH_LONG).show();
 
-                String valueName = String.valueOf(map.get("Name"));
+                String valueName = String.valueOf(map.get("name"));
                 text_name_menu_description.setText(valueName);
 
-                String valueDescription = String.valueOf(map.get("Description"));
+                String valueDescription = String.valueOf(map.get("description"));
                 text_description_description.setText(valueDescription);
 
-                String valueIngredient = String.valueOf(map.get("Ingredient"));
+                String valueIngredient = String.valueOf(map.get("ingredient"));
                 text_ingredient_menu_description.setText(valueIngredient);
 
                 Glide.with(getContext()).load(urlImage).into(image_menu_description);
@@ -111,7 +130,7 @@ public class DescriptionFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
