@@ -13,15 +13,12 @@ import com.poobest.com.mockpeoject.R;
 
 public class MenuHolder extends RecyclerView.ViewHolder{
 
-    public TextView textMenu;
-    public ImageView imgMenu;
+    public TextView tvName;
+    public ImageView imgView;
 
     public MenuHolder(View itemView) {
         super(itemView);
-
-        textMenu = itemView.findViewById(R.id.text_name_menu);
-        imgMenu = itemView.findViewById(R.id.image_menu_list);
-
+        tvName = itemView.findViewById(R.id.text_name_menu);
+        imgView = itemView.findViewById(R.id.image_menu_list);
     }
-
 }
