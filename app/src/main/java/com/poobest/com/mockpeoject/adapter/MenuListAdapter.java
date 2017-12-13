@@ -6,15 +6,16 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.poobest.com.mockpeoject.R;
-import com.poobest.com.mockpeoject.holder.MenuHolder;
 import com.poobest.com.mockpeoject.model.dao.MenuListItem;
 
 import java.util.List;
 
-public class MenuListAdapter extends RecyclerView.Adapter<MenuHolder> {
+public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuHolder> {
 
     private List<MenuListItem> list;
     private Context context;
@@ -34,20 +35,19 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuHolder> {
 
         MenuListItem menues = list.get(position);
 
-        if (holder instanceof MenuHolder) {
-            holder.textMenu.setText(menues.name);
-            Glide.with(context).load(menues.getImgUrl()).into(holder.imgMenu);
+        holder.textMenu.setText(menues.name);
+        Glide.with(context).load(menues.getImgUrl()).into(holder.imgMenu);
 
-            holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                @Override
-                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        holder.itemView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-                    menu.add(holder.getAdapterPosition(), 0, 0, "abc");
-                    menu.add(holder.getAdapterPosition(), 1, 0, "def");
+                menu.add(holder.getAdapterPosition(), 0, 0, "abc");
+                menu.add(holder.getAdapterPosition(), 1, 0, "def");
 
-                }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
@@ -55,4 +55,19 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuHolder> {
         return list.size();
     }
 
+    class MenuHolder extends RecyclerView.ViewHolder {
+
+        TextView textMenu;
+        ImageView imgMenu;
+
+        public MenuHolder(View itemView) {
+            super(itemView);
+
+            textMenu = itemView.findViewById(R.id.text_name_menu);
+            imgMenu = itemView.findViewById(R.id.image_menu_list);
+
+        }
+    }
+
 }
+
