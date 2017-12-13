@@ -1,11 +1,14 @@
 package com.poobest.com.mockpeoject.dashboard.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +18,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.facebook.login.LoginManager;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.poobest.com.mockpeoject.LoginActivity;
-import com.poobest.com.mockpeoject.R;
 import com.poobest.com.mockpeoject.adapter.MenuListAdapter;
-import com.poobest.com.mockpeoject.model.ItemClickCallback;
-import com.poobest.com.mockpeoject.model.dao.DerpData;
+
 import com.poobest.com.mockpeoject.model.dao.MenuListItem;
 
 import java.util.ArrayList;
@@ -30,14 +36,20 @@ import java.util.List;
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class HomeFragment extends Fragment implements ItemClickCallback, NavigationView.OnNavigationItemSelectedListener {
+public class HomeFragment extends Fragment
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView recyclerView;
-    MenuListAdapter adapter;
+    private RecyclerView recyclerView;
+    private List<MenuListItem> listResult;
+    private MenuListAdapter adapter;
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     FloatingSearchView mSearchView;
     DrawerLayout mDrawer;
     NavigationView navigationView;
+    CardView cardView;
 
     public HomeFragment() {
         super();
@@ -75,30 +87,132 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
 
+        // set firebase
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("menu");
+
         // set floatingView
         mDrawer = rootView.findViewById(R.id.drawer_layout);
         mSearchView = rootView.findViewById(R.id.floating_search_view);
         navigationView = rootView.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // set cardView
+        cardView = rootView.findViewById(R.id.card_view);
+
         setupDrawerLayout();
+        setupSearchBar();
 
 
         // Init 'View' instance(s) with rootView.findViewById here
         // Note: State of variable initialized here could not be saved
         //       in onSavedInstanceState
 
+        listResult = new ArrayList<>();
+
         recyclerView = rootView.findViewById(R.id.recycler_view_dashboard);
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
+        adapter = new MenuListAdapter(getContext(), listResult);
+        recyclerView.setAdapter(adapter);
 
-        adapter = new MenuListAdapter(DerpData.getListData());
+        updateList();
 
         recyclerView.setAdapter(adapter);
         adapter.setItemClickCallback(this);
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case 0:
+                break;
+            case 1:
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    private void updateList() {
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                listResult.add(dataSnapshot.getValue(MenuListItem.class));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                MenuListItem listItem = dataSnapshot.getValue(MenuListItem.class);
+
+                int index = getItemIndex(listItem);
+
+                listResult.set(index, listItem);
+                adapter.notifyItemChanged(index);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                MenuListItem listItem = dataSnapshot.getValue(MenuListItem.class);
+
+                int index = getItemIndex(listItem);
+
+                listResult.remove(index);
+                adapter.notifyItemRemoved(index);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private int getItemIndex(MenuListItem menu) {
+
+        int index = -1;
+
+        for (int i = 0; i < listResult.size(); i++) {
+            if (listResult.get(i).key.equals(menu.key)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    private void setupSearchBar() {
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String result) {
+                if (result != null) {
+//                    Toast.makeText(getContext(), ""+result, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                    intent.putExtra("result", result);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "please", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -111,12 +225,14 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
         // Restore Instance (Fragment level's variables) State here
     }
 
+
     @Override
     public void onClick(View view, int position) {
         Toast.makeText(getContext(), "Position " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void attachSearchViewActivityDrawer(FloatingSearchView searchView) {
+
+    private void attachSearchViewActivityDrawer(FloatingSearchView mSearchView) {
         mSearchView.attachNavigationDrawerToMenuButton(mDrawer);
     }
 
@@ -125,23 +241,25 @@ public class HomeFragment extends Fragment implements ItemClickCallback, Navigat
     }
 
 
-    //TODO
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
-        mDrawer.closeDrawer(GravityCompat.START);
-        switch (menuItem.getItemId()) {
-            case R.id.logout_facebook:
-                LoginManager.getInstance().logOut();
-                goLoginScreen();
-                return true;
-            default:
-                return true;
-        }
-    }
-
     private void goLoginScreen() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    //TODO
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        mDrawer.closeDrawer(GravityCompat.START);
+
+        int id = item.getItemId();
+
+        if (id == R.id.logout_facebook) {
+            // Handle the camera action
+        }
+        return true;
+
     }
 }

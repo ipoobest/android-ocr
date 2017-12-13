@@ -6,44 +6,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.poobest.com.mockpeoject.R;
-import com.poobest.com.mockpeoject.model.ItemClickCallback;
 
 /**
  * Created by j.poobest on 9/24/2017 AD.
  */
 
-public class MenuHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class MenuHolder extends RecyclerView.ViewHolder{
 
-    public TextView tvName;
-    public ImageView imgView;
-    private ItemClickCallback mListener;
+    public TextView textMenu;
+    public ImageView imgMenu;
 
-    public MenuHolder(View itemView, ItemClickCallback listener) {
+    public MenuHolder(View itemView) {
         super(itemView);
-        tvName = itemView.findViewById(R.id.text_name_menu);
-        imgView = itemView.findViewById(R.id.image_menu_list);
-        mListener = listener;
-        itemView.setOnClickListener(this);
-    }
 
-
-
-    @Override
-    public void onClick(View view) {
-        mListener.onClick(view, getAdapterPosition());
+        textMenu = itemView.findViewById(R.id.text_name_menu);
+        imgMenu = itemView.findViewById(R.id.image_menu_list);
 
     }
 
-
-//    public MenuHolder(View itemView) {
-//        super(itemView);
-//
-//        tvName = itemView.findViewById(R.id.text_name_menu);
-//        imgView = itemView.findViewById(R.id.image_menu_list);
-//    }
-//
-//    @Override
-//    public void onClick(View view, int position) {
-//
-//    }
 }
